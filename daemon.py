@@ -3,8 +3,8 @@ import os
 import time
 import signal
 
-class SignalHandler:
 
+class SignalHandler:
 
     SIGNALS = ()
 
@@ -20,8 +20,8 @@ class SignalHandler:
     def __repr__(self):
         return "<Class:%s>" %(self.__class__.__name__)
 
-class SigAction(SignalHandler):
 
+class SigAction(SignalHandler):
 
     def __init__(self, signum, callback):
         self.signum = signum
@@ -34,8 +34,8 @@ class SigAction(SignalHandler):
     def __repr__(self):
         return "<Class:%s signal:%s>" %(self.__class__.__name__, self.signum)
 
-class Daemon:
 
+class Daemon:
 
     def __init__(self, pidfile, stdin='/dev/null', stdout=sys.stdout, stderr='/dev/null'):
         self.stdin = stdin
@@ -47,11 +47,6 @@ class Daemon:
         self.sigDict = sigdict
 
     def daemonize(self):
-        """
-        do the UNIX double-fork magic, see Stevens' "Advanced
-        Programming in the UNIX Environment" for details (ISBN 0201563177)
-        http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC16
-        """
         try:
             pid = os.fork()
             if pid > 0:
@@ -97,8 +92,6 @@ class Daemon:
                 with open(self.pidfile, 'w') as pid_file:
                     pid_file.write(f"{pid}\n")
 
-                # Register cleanup function
-                #atexit.register(self.cleanup_pid)
 
         except OSError as e:
             sys.stderr.write(f"Error: {e}\n")
@@ -131,11 +124,8 @@ class Daemon:
             sys.exit(0)
 
         # Start the daemon
-        print('before daemonize')
         self.daemonize()
-        print('after daemonize')
         self.signalAssign()
-        print('before run')
         self.run()
 
     sigDict = {}
@@ -155,7 +145,7 @@ class Daemon:
         if not pid:
             message = "pidfile %s does not exist. Daemon not running?\n"
             sys.stderr.write(message % self.pidfile)
-            return # not an error in a restart
+            return
 
         # Try killing the daemon process
         try:

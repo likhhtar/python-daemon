@@ -53,7 +53,7 @@ class StatCon:
         logging.getLogger().addHandler(handler)
 
     def run(self):
-        print("Метод run запущен")
+        #print("Метод run запущен")
         while True:
             # Выполняем пинг и получаем результат
             user_value = self.ping_host("10.101.0.135")

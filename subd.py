@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 import sys
-import time
 import signal
 import daemon
 import daemonconfig
@@ -9,31 +7,31 @@ import logging
 
 StaticConfig = daemonconfig.StatCon()
 
-class MyDaemon(daemon.Daemon):
 
+class MyDaemon(daemon.Daemon):
 
     def run(self):
         StaticConfig.run()
 
+
 class DaemonConfigurator:
 
-
-    def __init__(self,ourdaemon):
+    def __init__(self, ourdaemon):
         self.ourdaemon = ourdaemon
 
     def getSignalsForDaemon(self):
         localCon = daemonconfig.SigFunctionsCon(self.ourdaemon)
-        sigDict={}
+        sigDict = {}
         for sig in dir(localCon):
-            if sig[0:1]!='_':
+            if sig[0:1] != '_':
                 sigDict[getattr(signal, sig)]=getattr(localCon, sig)
         return sigDict
 
     def getReactsForDaemon(self):
         localCon = daemonconfig.ReactFunctionCon(self.ourdaemon)
-        reactDict={}
+        reactDict = {}
         for react in dir(localCon):
-            if react[0:1]!='_':
+            if react[0:1] != '_':
                 reactDict[react]=getattr(localCon, react)
         return reactDict
 
@@ -51,7 +49,6 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         if sys.argv[1] in iter(ReactDict):
-            print('Command is found')
             try:
                 ReactDict[sys.argv[1]](*sys.argv[2:len(sys.argv)])
                 sys.exit(0)
